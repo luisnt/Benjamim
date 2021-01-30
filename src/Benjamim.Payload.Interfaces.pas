@@ -23,13 +23,16 @@ Type
     function Add(const aKey: string; const aValue: TJsonArray; aFormat: string = '"%s":%s'): iPayload; overload;
     function Add(const aKey: string; const aValue: Variant; aFormat: string = '"%s":"%s"'): iPayload; overload;
 
-    function jti(const aID: UInt64): iPayload;                 { jti - Jwt ID          - Jwt ID ( ID ) }
-    function iss(const aEmissor: String): iPayload;            { iss - Issuer          - Emissor ( Emissor ) }
-    function sub(const aAssunto: String): iPayload;            { sub - Subject         - Assunto }
-    function aud(const aRemoteIP: String): iPayload;           { aud - Audience        - Audiência ( Remote IP ) }
-    function iat(const aEmissionAt: TDateTime): iPayload;      { iat - Issued At       - Emitido em ( Quando o Token foi Emitido / Automático ) }
-    function nbf(const aValidityStarted: TDateTime): iPayload; { nbf - Not Before      - Validade Iniciada ( Inicia Em ) }
-    function exp(const aValidityEnded: TDateTime): iPayload;   { exp - Expiration Time - Validade Terminada ( Expirar Em ) }
+    function jti(const aID: UInt64): iPayload;                                  { jti - Jwt ID          - Jwt ID ( ID ) }
+    function iss(const aEmissor: String): iPayload;                             { iss - Issuer          - Emissor ( Emissor ) }
+    function sub(const aAssunto: String): iPayload;                             { sub - Subject         - Assunto }
+    function aud(const aRemoteIP: String): iPayload;                            { aud - Audience        - Audiência ( Remote IP ) }
+    function iat(const aEmissionAt: TDateTime): iPayload; overload;             { iat - Issued At       - Emitido em ( Quando o Token foi Emitido / Automático ) }
+    function iat(const aEmissionAtUsDateTime: string): iPayload; overload;      { iat - Issued At       - Emitido em ( Quando o Token foi Emitido / Automático ) }
+    function nbf(const aValidityStarted: TDateTime): iPayload; overload;        { nbf - Not Before      - Validade Iniciada ( Inicia Em ) }
+    function nbf(const aValidityStartedUsDateTime: string): iPayload; overload; { nbf - Not Before      - Validade Iniciada ( Inicia Em ) }
+    function exp(const aValidityEnded: TDateTime): iPayload; overload;          { exp - Expiration Time - Validade Terminada ( Expirar Em ) }
+    function exp(const aValidityEndedUsDateTime: string): iPayload; overload;   { exp - Expiration Time - Validade Terminada ( Expirar Em ) }
 
     function AsJson(const aAsBase64: Boolean = false): string;
     function AsJsonObject: TJsonObject;
