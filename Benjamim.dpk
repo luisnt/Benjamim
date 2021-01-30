@@ -1,0 +1,46 @@
+package Benjamim;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS OFF}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO OFF}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE RELEASE}
+{$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'JWT library for token creation and verification'}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl;
+
+contains
+  Benjamim.Utils in 'src\Benjamim.Utils.pas',
+  Benjamim.Header.Interfaces in 'src\Benjamim.Header.Interfaces.pas',
+  Benjamim.Header in 'src\Benjamim.Header.pas',
+  Benjamim.Payload.Interfaces in 'src\Benjamim.Payload.Interfaces.pas',
+  Benjamim.Payload in 'src\Benjamim.Payload.pas',
+  Benjamim.Signature.Interfaces in 'src\Benjamim.Signature.Interfaces.pas',
+  Benjamim.Signature in 'src\Benjamim.Signature.pas',
+  Benjamim.Interfaces in 'src\Benjamim.Interfaces.pas',
+  Benjamim in 'src\Benjamim.pas';
+
+end.

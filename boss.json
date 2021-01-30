@@ -1,0 +1,9 @@
+{
+	"name": "Benjamim",
+	"description": "Benjamim - JWT library boss for token creation and verification",
+	"version": "1.0.2",
+	"homepage": "https://github.com/luisnt/Benjamim",
+	"mainsrc": "./",
+	"projects": [],
+	"dependencies": {}
+}

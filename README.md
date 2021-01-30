@@ -46,50 +46,113 @@
 
 ##### Sample use
 ```delphi
-    uses Benjamim;
-     
-    var LToken: string;
-    begin
-       { 
-          Set the password using the JWT.Password ('secret') method; is optional. 
-          Loads the JWT_PRIVATE_PASSWORD environment by default and if it does not exist
-          will use the DEFAULT_PASSWORD = 'your-256-bit-secret' constant contained in
-          unit Core.JWT.Utils.pas    
+ 
+ uses
+   Benjamim
+    ;
 
-          Definir a senha atraves do método JWT.Password('secret'); é opcional 
-          Carrega por padrão a ambiente JWT_PRIVATE_PASSWORD e se não existir 
-          usará a constante DEFAULT_PASSWORD='secret' contida na 
-          unit Core.JWT.Utils.pas 
-       }
-       Benjamim.JWT.Password('secret'); { OPTIONAL }
+procedure print(aToken: string; aSign: boolean);
+begin
+  WriteLn(EmptyStr);
+  WriteLn('       Token: ');
+  WriteLn(aToken);
+  WriteLn('   Algorithm: ', Benjamim.JWT.Header.Algorithm);
+  WriteLn('        Sign: ', BoolToStr(aSign, true));
+  WriteLn(EmptyStr);
+  WriteLn(EmptyStr);
+end;
 
-       Benjamim.JWT.Header.Algorithm(TJwtAlgorithm.HS256); { OPTIONAL - DEFAULT TJwtAlgorithm.HS256 } 
+var
+  LToken: string;
+  LSign : boolean;
 
-       Benjamim.JWT.Payload
-                   .jti(1)                           
-                   .iss('Luis Nt')                   
-                   .sub('Chave de acesso')           
-                   .aud('192.168.0.77')              
-                   .iat('2021-01-31 15:55:21.123')   
-                   .nbf('2021-01-31 18:01:01.001')   
-                   .exp('2021-01-31 22:01:01.001')   
-                   .add('price', 10.5) 
-                   .add('name', 'your fullname') 
-                   .add('phone', 559822223333) 
-       ;
-       LToken := Benjamim.JWT.Signature.Sign; 
+begin
+    ReportMemoryLeaksOnShutdown := true;
 
-       WriteLn('Token: ', LToken); 
+    Benjamim.JWT.Password('secret'); { OPTIONAL }
 
-    end.
+    Benjamim.JWT.Header.Algorithm(TJwtAlgorithm.HS512); { OPTIONAL - DEFAULT TJwtAlgorithm.HS256 }
+
+    Benjamim.JWT.Payload.jti(1)
+      .iss('Luis Nt')
+      .sub('Chave de acesso')
+      .aud('192.168.0.77')
+      .iat('2021-01-31 15:55:21.123')
+      .nbf('2021-01-31 18:01:01.001')
+      .exp('2021-01-31 22:01:01.001')
+      .add('price', 10.5)
+      .add('name', 'your fullname')
+      .add('phone', 559822223333)
+      ;
+    LToken := Benjamim.JWT.Signature.Sign;
+
+    LSign :=
+      Benjamim.JWT
+      .Token(LToken)
+      .Signature
+      .Verify;
+
+    print(LToken, LSign);
+
+    LToken :=
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ikpva' +
+      'G4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+
+    LSign :=
+      Benjamim.JWT
+      .Token(LToken)
+      .Password('your-256-bit-secret') { usado no site JWT.io }
+      .Signature
+      .Verify;
+
+    print(LToken, LSign);
+
+    ReadLn;
+
+  end.
+
 ```
 
 #### Verify a Token
 ##### Sample use
 ```delphi
-    uses Benjamim;
+ 
+ uses
+   Benjamim
+    ;
 
-    Benjamim.JWT.Password('secret'); { OPCIONAL }
-      
-    Benjamim.JWT.Token(aValue).Signature.Verify; { true / false }
+  procedure print(aToken: string; aSign: boolean);
+  begin
+    WriteLn(EmptyStr);
+    WriteLn('       Token: ');
+    WriteLn(aToken);
+    WriteLn('   Algorithm: ', Benjamim.JWT.Header.Algorithm);
+    WriteLn('        Sign: ', BoolToStr(aSign, true));
+    WriteLn(EmptyStr);
+    WriteLn(EmptyStr);
+  end;
+
+  var
+    LToken: string;
+    LSign : boolean;
+  begin
+      ReportMemoryLeaksOnShutdown := true;
+
+      LToken :=
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ikpva' +
+        'G4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+
+      LSign :=
+        Benjamim.JWT
+        .Token(LToken)
+        .Password('your-256-bit-secret') { usado no site JWT.io }
+        .Signature
+        .Verify;
+
+      print(LToken, LSign);
+
+      ReadLn;
+
+  end.
+
 ```
