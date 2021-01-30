@@ -20,8 +20,12 @@
    assinado ou integridade protegida com um código de autenticação de mensagem
    (MAC) e/ou criptografado.
 
-#### Generate a new Token
-##### Support Types 
+### Install
+> Boss install https://github.com/luisnt/Benjamim
+
+
+### Generate a new Token
+#### Support Types 
 ```delphi
 {
     jti - Jwt ID          - Jwt ID (ID)
@@ -44,7 +48,7 @@
 }
 ```     
 
-##### Sample use
+#### Sample use
 ```delphi
  
  uses
@@ -101,8 +105,8 @@ end.
 
 ```
 
-#### Verify a Token
-##### Sample use
+### Verify a Token
+#### Sample use
 ```delphi
  
  uses
