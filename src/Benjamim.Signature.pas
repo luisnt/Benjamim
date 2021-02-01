@@ -3,12 +3,12 @@ unit Benjamim.Signature;
 interface
 
 uses
-  System.Classes, System.TypInfo, System.NetEncoding, System.Hash, System.SysUtils
-    , Benjamim.Utils
-    , Benjamim.Signature.Interfaces
-    , Benjamim.Interfaces
-
-    ;
+  {$IF DEFINED(FPC)}
+  Classes, base64, SysUtils,
+  {$ELSE}
+  System.Classes, System.TypInfo, System.NetEncoding, System.Hash, System.SysUtils,
+  {$ENDIF}
+  Benjamim.Utils, Benjamim.Signature.Interfaces, Benjamim.Interfaces;
 
 type
   TSignature = class(TInterfacedObject, iSignature)
@@ -20,8 +20,6 @@ type
 
     procedure loadAlgorithm(const aHeader: string);
     function Sign(const aData: string): string; overload;
-  private
-
   public
     function Sign: string; overload;
     function Verify: boolean;
@@ -49,6 +47,9 @@ end;
 
 function TSignature.Sign(const aData: string): string;
 begin
+  {$IF DEFINED(FPC)}
+  { TODO -oAll -cLazarus : Implementar para lazarus }
+  {$ELSE}
   if FJWT.PasswordEncoded then
     Exit((TNetEncoding.Base64.EncodeBytesToString(THashSHA2.GetHMACAsBytes(
       TEncoding.UTF8.GetBytes(aData),
@@ -61,6 +62,7 @@ begin
     FJWT.Password,
     FJWT.Header.Algorithm.AsJwtAlgorithm.AsAlgorithm)
     )).ClearLineBreak.FixBase64;
+  {$ENDIF}
 end;
 
 procedure TSignature.loadAlgorithm(const aHeader: string);
@@ -87,19 +89,23 @@ begin
 end;
 
 { Signature - Verify }
+
 function TSignature.Verify: boolean;
 const
-  INDEX_HEADER    = 0;
-  INDEX_PAYLOAD   = 1;
+  INDEX_HEADER  = 0;
+  INDEX_PAYLOAD = 1;
   INDEX_SIGNATURE = 2;
 begin
+  {$IF DEFINED(FPC)}
+  { TODO -oAll -cLazarus : Implementar para lazarus }
+  {$ELSE}
   try
     with TStringList.Create do
       try
         Clear;
-        Delimiter       := DotSep[1];
+        Delimiter := DotSep[1];
         StrictDelimiter := true;
-        DelimitedText   := FJWT.Token;
+        DelimitedText := FJWT.Token;
         loadAlgorithm(Strings[INDEX_HEADER]);
         Exit(SameStr(Strings[INDEX_SIGNATURE], Sign(Strings[INDEX_HEADER] + DotSep + Strings[INDEX_PAYLOAD])));
       finally
@@ -108,14 +114,20 @@ begin
   except
     on E: Exception do
   end;
+  {$ENDIF}
   Result := false;
 end;
 
 { Signature - Sign }
+
 function TSignature.Sign: string;
 begin
+  {$IF DEFINED(FPC)}
+  { TODO -oAll -cLazarus : Implementar para lazarus }
+  {$ELSE}
   Result := FJWT.Header.AsJson(true) + DotSep + FJWT.Payload.AsJson(true);
   Result := Result + DotSep + Sign(Result);
+  {$ENDIF}
 end;
 
 end.

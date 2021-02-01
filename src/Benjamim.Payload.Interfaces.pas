@@ -3,9 +3,11 @@ unit Benjamim.Payload.Interfaces;
 interface
 
 uses
-  System.Variants, System.JSON
-
-    ;
+  {$IF DEFINED(FPC)}
+  fpjson, Variants;
+  {$ELSE}
+  System.Variants, System.JSON;
+  {$ENDIF}
 
 Type
   iPayload = interface
