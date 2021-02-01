@@ -6,6 +6,6 @@
 	"mainsrc": "./",
 	"projects": [],
 	"dependencies": {
-		"github.com/luisnt/benjamim": "^2.0.0"
+		"github.com/luisnt/benjamim": "^2.0.1"
 	}
 }
