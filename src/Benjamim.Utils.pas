@@ -66,11 +66,7 @@ var
 begin
   LValue := Self.AsString;
   LValue := 'SHA' + LValue[3] + LValue[4] + LValue[5];
-  {$IF DEFINED(FPC)}
-  { TODO -oAll -cLazarus : Implementar para lazarus }
-  {$ELSE}
   Result := TSHA2Version(GetEnumValue(TypeInfo(TSHA2Version), LValue));
-  {$ENDIF}
 end;
 
 function TJwtAlgorithmHelper.AsString: String;

@@ -96,9 +96,6 @@ const
   INDEX_PAYLOAD = 1;
   INDEX_SIGNATURE = 2;
 begin
-  {$IF DEFINED(FPC)}
-  { TODO -oAll -cLazarus : Implementar para lazarus }
-  {$ELSE}
   try
     with TStringList.Create do
       try
@@ -114,7 +111,6 @@ begin
   except
     on E: Exception do
   end;
-  {$ENDIF}
   Result := false;
 end;
 
