@@ -4,7 +4,7 @@ interface
 
 uses
   {$IF DEFINED(FPC)}
-  Classes, fpjson, SysUtils, DateUtils, base64,
+  Classes, fpjson, SysUtils, DateUtils,
   {$ELSE}
   System.Classes, System.JSON, System.SysUtils, System.DateUtils, System.NetEncoding,
   {$ENDIF}
@@ -26,9 +26,9 @@ type
     function Add(const aKey: string; const aValue: Extended; aFormat: string = '"%s":%s'): iPayload; overload;
     function Add(const aKey: string; const aValue: TDateTime; aFormat: string = '"%s":"%s"'): iPayload; overload;
     function Add(const aKey: string; const aValue: Boolean; aFormat: string = '"%s":%s'): iPayload; overload;
-    function Add(const aKey: string; const aValue: TJsonObject; aFormat: string = '"%s":%s'): iPayload; overload;
-    function Add(const aKey: string; const aValue: TJsonArray; aFormat: string = '"%s":%s'): iPayload; overload;
-    function Add(const aKey: string; const aValue: Variant; aFormat: string = '"%s":"%s"'): iPayload; overload;
+    function Add(const aKey: string; const aValue: TJsonObject): iPayload; overload;
+    function Add(const aKey: string; const aValue: TJsonArray): iPayload; overload;
+    function Add(const aKey: string; const aValue: Variant): iPayload; overload;
 
     function jti(const aID: UInt64): iPayload;                                  { jti - Jwt ID          - Jwt ID ( ID ) }
     function iss(const aEmissor: String): iPayload;                             { iss - Issuer          - Emissor ( Emissor ) }
@@ -70,6 +70,7 @@ end;
 function TPayload.Clear: iPayload;
 begin
   FData.Clear;
+  Result := Self;
 end;
 
 function TPayload.Add(const aKey: string; const aValue: string; aFormat: string = '"%s":"%s"'): iPayload;
@@ -108,17 +109,17 @@ begin
   Result := Self;
 end;
 
-function TPayload.Add(const aKey: string; const aValue: TJsonObject; aFormat: string): iPayload;
+function TPayload.Add(const aKey: string; const aValue: TJsonObject): iPayload;
 begin
   Result := Add(aKey, {$IF DEFINED(FPC)}aValue.AsJSON{$ELSE}aValue.ToJSON{$ENDIF});
 end;
 
-function TPayload.Add(const aKey: string; const aValue: TJsonArray; aFormat: string): iPayload;
+function TPayload.Add(const aKey: string; const aValue: TJsonArray): iPayload;
 begin
   Result := Add(aKey, {$IF DEFINED(FPC)}aValue.AsJSON{$ELSE}aValue.ToJSON{$ENDIF});
 end;
 
-function TPayload.Add(const aKey: string; const aValue: Variant; aFormat: string): iPayload;
+function TPayload.Add(const aKey: string; const aValue: Variant): iPayload;
 begin
   Result := Add(aKey, aValue.AsString);
 end;

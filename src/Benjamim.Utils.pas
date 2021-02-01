@@ -8,18 +8,14 @@ interface
 
 uses
   {$IF DEFINED(FPC)}
-  fpjson, base64;
+  fpjson, base64, TypInfo;
   {$ELSE}
   System.Variants, System.JSON, System.Hash;
   {$ENDIF}
 
 type
   TJwtAlgorithm = (HS256, HS384, HS512);
-  {$IF DEFINED(FPC)}
-  { TODO -oAll -cLazarus : Implementar para lazarus }
-  {$ELSE}
-  TSHA2Version = THashSHA2.TSHA2Version;
-  {$ENDIF}
+  TSHA2Version = (SHA224, SHA256, SHA384, SHA512, SHA512_224, SHA512_256);
 
 const
   DEFAULT_EXPIRE_IN_HOURS = 2;
@@ -28,22 +24,14 @@ const
 
 type
   TJwtAlgorithmHelper = record Helper for TJwtAlgorithm
-    {$IF DEFINED(FPC)}
-    { TODO -oAll -cLazarus : Implementar para lazarus }
-    {$ELSE}
     function AsAlgorithm: TSHA2Version;
-    {$ENDIF}
     function AsString: String;
   end;
 
-  {$IF DEFINED(FPC)}
-  { TODO -oAll -cLazarus : Implementar para lazarus }
-  {$ELSE}
   TSHA2VersionHelper = record Helper for TSHA2Version
     function AsJwtAlgorithm: TJwtAlgorithm;
     function AsString: String;
   end;
-  {$ENDIF}
 
   TStringHelper = record Helper for String
   const
@@ -72,33 +60,26 @@ uses
 
 { TJwtAlgorithmHelper }
 
-{$IF DEFINED(FPC)}
-{ TODO -oAll -cLazarus : Implementar para lazarus }
-{$ELSE}
 function TJwtAlgorithmHelper.AsAlgorithm: TSHA2Version;
 var
   LValue: string;
 begin
   LValue := Self.AsString;
   LValue := 'SHA' + LValue[3] + LValue[4] + LValue[5];
-  Result := TSHA2Version(GetEnumValue(TypeInfo(TSHA2Version), LValue));
-end;
-{$ENDIF}
-
-function TJwtAlgorithmHelper.AsString: String;
-begin
   {$IF DEFINED(FPC)}
   { TODO -oAll -cLazarus : Implementar para lazarus }
   {$ELSE}
-  Result := GetEnumName(TypeInfo(TJwtAlgorithm), integer(Self));
+  Result := TSHA2Version(GetEnumValue(TypeInfo(TSHA2Version), LValue));
   {$ENDIF}
+end;
+
+function TJwtAlgorithmHelper.AsString: String;
+begin
+  Result := GetEnumName(TypeInfo(TJwtAlgorithm), integer(Self));
 end;
 
 { TSHA2VersionHelper }
 
-{$IF DEFINED(FPC)}
-{ TODO -oAll -cLazarus : Implementar para lazarus }
-{$ELSE}
 function TSHA2VersionHelper.AsJwtAlgorithm: TJwtAlgorithm;
 var
   LValue: string;
@@ -112,17 +93,12 @@ function TSHA2VersionHelper.AsString: String;
 begin
   Result := GetEnumName(TypeInfo(TSHA2Version), integer(Self));
 end;
-{$ENDIF}
 
 { TStringHelper }
 
 function TStringHelper.AsJwtAlgorithm: TJwtAlgorithm;
 begin
-  {$IF DEFINED(FPC)}
-  { TODO -oAll -cLazarus : Implementar para lazarus }
-  {$ELSE}
   Result := TJwtAlgorithm(GetEnumValue(TypeInfo(TJwtAlgorithm), String(Self)));
-  {$ENDIF}
 end;
 
 function TStringHelper.ClearLineBreak: String;
@@ -167,7 +143,7 @@ end;
 function TStringHelper.AsBase64: String;
 begin
   {$IF DEFINED(FPC)}
-  { TODO -oAll -cLazarus : Implementar para lazarus }
+  Result := EncodeStringBase64(Self);
   {$ELSE}
   Result := Fix(TBase64Encoding.Base64.Encode(Self));
   {$ENDIF}
@@ -176,7 +152,7 @@ end;
 function TStringHelper.AsString: String;
 begin
   {$IF DEFINED(FPC)}
-  { TODO -oAll -cLazarus : Implementar para lazarus }
+  Result := DecodeStringBase64(Self);
   {$ELSE}
   Result := TBase64Encoding.Base64.Decode(Self);
   {$ENDIF}

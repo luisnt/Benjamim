@@ -4,7 +4,7 @@ interface
 
 uses
   {$IF DEFINED(FPC)}
-  Classes, base64, SysUtils,
+  Classes, SysUtils, TypInfo,
   {$ELSE}
   System.Classes, System.TypInfo, System.NetEncoding, System.Hash, System.SysUtils,
   {$ENDIF}
@@ -122,12 +122,8 @@ end;
 
 function TSignature.Sign: string;
 begin
-  {$IF DEFINED(FPC)}
-  { TODO -oAll -cLazarus : Implementar para lazarus }
-  {$ELSE}
   Result := FJWT.Header.AsJson(true) + DotSep + FJWT.Payload.AsJson(true);
   Result := Result + DotSep + Sign(Result);
-  {$ENDIF}
 end;
 
 end.

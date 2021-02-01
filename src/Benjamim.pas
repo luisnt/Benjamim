@@ -25,12 +25,12 @@ type
     destructor Destroy; override;
 
   strict private
-    FToken          : string;
-    FPassword       : string;
+    FToken: string;
+    FPassword: string;
     FPasswordEncoded: boolean;
-    FHeader         : iHeader;
-    FPayload        : iPayload;
-    FSignature      : iSignature;
+    FHeader: iHeader;
+    FPayload: iPayload;
+    FSignature: iSignature;
 
   private
     class var FInstance: iJWT;
