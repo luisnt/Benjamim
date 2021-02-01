@@ -3,10 +3,12 @@ unit Benjamim.Header.Interfaces;
 interface
 
 uses
-  System.JSON
-
-    , Benjamim.Utils
-    ;
+  {$IF DEFINED(FPC)}
+  fpjson,
+  {$ELSE}
+  System.JSON,
+  {$ENDIF}
+  Benjamim.Utils;
 
 Type
   iHeader = interface

@@ -1,14 +1,9 @@
 program BenjamimTest;
 
 {$APPTYPE CONSOLE}
-
 {$R *.res}
 
-
-uses
-  System.SysUtils
-    , Benjamim
-    ;
+uses System.SysUtils, Benjamim;
 
 procedure print(aToken: string; aSign: boolean);
 begin
@@ -23,7 +18,7 @@ end;
 
 var
   LToken: string;
-  LSign : boolean;
+  LSign: boolean;
 
 begin
   ReportMemoryLeaksOnShutdown := true;
@@ -42,8 +37,8 @@ begin
       .exp('2021-01-31 22:01:01.001')
       .add('price', 10.5)
       .add('name', 'your fullname')
-      .add('phone', 559822223333)
-      ;
+      .add('phone', 559822223333);
+
     LToken := Benjamim.JWT.Signature.Sign;
 
     LSign :=
@@ -72,5 +67,4 @@ begin
     on E: Exception do
       WriteLn(E.ClassName, ': ', E.Message);
   end;
-
 end.

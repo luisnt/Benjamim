@@ -1,15 +1,19 @@
 unit Benjamim;
 
+{$IF DEFINED(FPC)}
+  {$MODE DELPHI}{$H+}
+{$ENDIF}
+
 interface
 
 uses
-  System.Classes, System.StrUtils
-    , Benjamim.Utils
-    , Benjamim.Header.Interfaces
-    , Benjamim.Payload.Interfaces
-    , Benjamim.Signature.Interfaces
-    , Benjamim.Interfaces
-    ;
+  {$IF DEFINED(FPC)}
+    Classes, StrUtils,
+  {$ELSE}
+    System.Classes, System.StrUtils,
+  {$ENDIF}
+  Benjamim.Utils, Benjamim.Header.Interfaces, Benjamim.Payload.Interfaces,
+  Benjamim.Signature.Interfaces, Benjamim.Interfaces;
 
 type
   TJwtAlgorithm = Benjamim.Utils.TJwtAlgorithm;
@@ -21,12 +25,12 @@ type
     destructor Destroy; override;
 
   strict private
-    FToken          : string;
-    FPassword       : string;
+    FToken: string;
+    FPassword: string;
     FPasswordEncoded: boolean;
-    FHeader         : iHeader;
-    FPayload        : iPayload;
-    FSignature      : iSignature;
+    FHeader: iHeader;
+    FPayload: iPayload;
+    FSignature: iSignature;
 
   private
     class var FInstance: iJWT;
@@ -47,11 +51,12 @@ function JWT(const aSingleton: boolean = true): iJWT;
 implementation
 
 uses
-  System.SysUtils
-    , Benjamim.Header
-    , Benjamim.Payload
-    , Benjamim.Signature
-    ;
+  {$IF DEFINED(FPC)}
+  SysUtils,
+  {$ELSE}
+  System.SysUtils,
+  {$ENDIF}
+  Benjamim.Header, Benjamim.Payload, Benjamim.Signature;
 
 function JWT(const aSingleton: boolean = true): iJWT;
 begin
@@ -73,25 +78,25 @@ end;
 
 constructor TJWT.Create;
 begin
-  FHeader          := THeader.New;
-  FPayload         := TPayload.New;
-  FSignature       := TSignature.New(Self);
+  FHeader := THeader.New;
+  FPayload := TPayload.New;
+  FSignature := TSignature.New(Self);
   FPasswordEncoded := false;
 end;
 
 destructor TJWT.Destroy;
 begin
-  FHeader    := nil;
-  FPayload   := nil;
+  FHeader := nil;
+  FPayload := nil;
   FSignature := nil;
   inherited Destroy;
 end;
 
 function TJWT.Password(aValue: string; const aEncoded: boolean = false): iJWT;
 begin
-  FPassword        := aValue;
+  FPassword := aValue;
   FPasswordEncoded := aEncoded;
-  Result           := Self;
+  Result := Self;
 end;
 
 function TJWT.Token(aValue: string): iJWT;
