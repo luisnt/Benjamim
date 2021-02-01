@@ -8,7 +8,7 @@ interface
 
 uses
   {$IF DEFINED(FPC)}
-  fpjson, base64, TypInfo;
+  SysUtils, StrUtils, variants, fpjson, base64, TypInfo;
   {$ELSE}
   System.Variants, System.JSON, System.Hash;
   {$ENDIF}
@@ -51,12 +51,9 @@ type
 
 implementation
 
-uses
-  {$IF DEFINED(FPC)}
-  SysUtils, StrUtils, variants;
-  {$ELSE}
-  System.TypInfo, System.SysUtils, System.StrUtils, System.NetEncoding;
-  {$ENDIF}
+{$IF NOT DEFINED(FPC)}
+uses System.TypInfo, System.SysUtils, System.StrUtils, System.NetEncoding;
+{$ENDIF}
 
 { TJwtAlgorithmHelper }
 
@@ -130,7 +127,7 @@ end;
 function TStringHelper.AsBase64url: String;
 begin
   {$IF DEFINED(FPC)}
-  { TODO -oAll -cLazarus : Implementar para lazarus }
+  Result := EncodeStringBase64(Self).FixBase64;
   {$ELSE}
   Result := TBase64Encoding.Base64.Encode(Self).FixBase64;
   {$ENDIF}

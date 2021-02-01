@@ -48,7 +48,7 @@ end;
 function TSignature.Sign(const aData: string): string;
 begin
   {$IF DEFINED(FPC)}
-  { TODO -oAll -cLazarus : Implementar para lazarus }
+  { TODO -oAll -cLazarus : Implementar }
   {$ELSE}
   if FJWT.PasswordEncoded then
     Exit((TNetEncoding.Base64.EncodeBytesToString(THashSHA2.GetHMACAsBytes(
