@@ -4,8 +4,8 @@
 	"installedModules": {
 		"github.com/luisnt/benjamim": {
 			"name": "benjamim",
-			"version": "1.0.4",
-			"hash": "0a986bff0b205f3016fc134d032a8609",
+			"version": "2.0.0,
+			"hash": "8c622cab2728abb084452ca64b1d3651667f27ba",
 			"artifacts": {},
 			"failed": false,
 			"changed": false
