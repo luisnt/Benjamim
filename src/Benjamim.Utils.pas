@@ -1,18 +1,26 @@
 ﻿unit Benjamim.Utils;
-
+
+{$IF DEFINED(FPC)}
+  {$MODE DELPHI}{$H+}
+{$ENDIF}
+
 interface
 
 uses
+  {$IF DEFINED(FPC)}
+  SysUtils, StrUtils, variants, fpjson, base64, TypInfo;
+  {$ELSE}
   System.Variants, System.JSON, System.Hash;
+  {$ENDIF}
 
 type
   TJwtAlgorithm = (HS256, HS384, HS512);
-  TSHA2Version  = THashSHA2.TSHA2Version;
+  TSHA2Version = (SHA224, SHA256, SHA384, SHA512, SHA512_224, SHA512_256);
 
 const
   DEFAULT_EXPIRE_IN_HOURS = 2;
-  DEFAULT_PASSWORD        = 'your-256-bit-secret';
-  DEFAULT_ALGORITHM       = TJwtAlgorithm.HS256;
+  DEFAULT_PASSWORD = 'your-256-bit-secret';
+  DEFAULT_ALGORITHM = TJwtAlgorithm.HS256;
 
 type
   TJwtAlgorithmHelper = record Helper for TJwtAlgorithm
@@ -25,9 +33,7 @@ type
     function AsString: String;
   end;
 
-  TStringHelper = record Helper for
-    String
-
+  TStringHelper = record Helper for String
   const
     Empty = '';
     function AsJwtAlgorithm: TJwtAlgorithm;
@@ -37,7 +43,6 @@ type
     function FixBase64: string;
     function AsBase64url: String;
     function AsString: String;
-//    function StartsWith(const Value: string): Boolean;
   end;
 
   TVariantHelper = record Helper for Variant
@@ -46,10 +51,12 @@ type
 
 implementation
 
-uses
-  System.TypInfo, System.SysUtils, System.StrUtils, System.NetEncoding;
+{$IF NOT DEFINED(FPC)}
+uses System.TypInfo, System.SysUtils, System.StrUtils, System.NetEncoding;
+{$ENDIF}
 
 { TJwtAlgorithmHelper }
+
 function TJwtAlgorithmHelper.AsAlgorithm: TSHA2Version;
 var
   LValue: string;
@@ -89,13 +96,13 @@ end;
 
 function TStringHelper.ClearLineBreak: String;
 begin
-  Self   := StringReplace(Self, sLineBreak, '', [rfReplaceAll]);
+  Self := StringReplace(Self, sLineBreak, '', [rfReplaceAll]);
   Result := Self;
 end;
 
 function TStringHelper.AsJSONObject: TJSONObject;
 begin
-  Result := System.JSON.TJSONObject(System.JSON.TJSONObject.ParseJSONValue(TEncoding.ASCII.GetBytes(Self), 0));
+  Result := {$IF DEFINED(FPC)}GetJSON(Self) as TJSONObject{$ELSE}TJSONObject(TJSONObject.ParseJSONValue(TEncoding.ASCII.GetBytes(Self), 0)){$ENDIF};
 end;
 
 function Fix(aValue: string): string;
@@ -104,8 +111,8 @@ const
 var
   I: integer;
 begin
-  Result   := aValue;
-  for I    := 1 to Length(STR_TO_CLEAR) do
+  Result := aValue;
+  for I := 1 to Length(STR_TO_CLEAR) do
     Result := StringReplace(Result, STR_TO_CLEAR[I], '', [rfReplaceAll]);
 end;
 
@@ -119,24 +126,36 @@ end;
 
 function TStringHelper.AsBase64url: String;
 begin
-  Result := System.NetEncoding.TBase64Encoding.Base64.Encode(Self).FixBase64;
+  {$IF DEFINED(FPC)}
+  Result := EncodeStringBase64(Self).FixBase64;
+  {$ELSE}
+  Result := TBase64Encoding.Base64.Encode(Self).FixBase64;
+  {$ENDIF}
 end;
 
 function TStringHelper.AsBase64: String;
 begin
-  Result := Fix(System.NetEncoding.TBase64Encoding.Base64.Encode(Self));
+  {$IF DEFINED(FPC)}
+  Result := EncodeStringBase64(Self);
+  {$ELSE}
+  Result := Fix(TBase64Encoding.Base64.Encode(Self));
+  {$ENDIF}
 end;
 
 function TStringHelper.AsString: String;
 begin
-  Result := System.NetEncoding.TBase64Encoding.Base64.Decode(Self);
+  {$IF DEFINED(FPC)}
+  Result := DecodeStringBase64(Self);
+  {$ELSE}
+  Result := TBase64Encoding.Base64.Decode(Self);
+  {$ENDIF}
 end;
 
 { TVariantHelper }
+
 function TVariantHelper.AsString: String;
 begin
-  Result := System.Variants.VarToStrDef(Self, EmptyStr);
+  Result := VarToStrDef(Self, EmptyStr);
 end;
 
 end.
-

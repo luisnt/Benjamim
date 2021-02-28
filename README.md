@@ -21,7 +21,7 @@
    (MAC) e/ou criptografado.
 
 ### Install
-> Boss install https://github.com/luisnt/Benjamim
+> Boss install **luisnt/Benjamim**
 
 
 ### Generate a new Token

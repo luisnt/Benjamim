@@ -3,9 +3,11 @@ unit Benjamim.Payload.Interfaces;
 interface
 
 uses
-  System.Variants, System.JSON
-
-    ;
+  {$IF DEFINED(FPC)}
+  fpjson, Variants;
+  {$ELSE}
+  System.Variants, System.JSON;
+  {$ENDIF}
 
 Type
   iPayload = interface
@@ -19,9 +21,9 @@ Type
     function Add(const aKey: string; const aValue: Extended; aFormat: string = '"%s":%s'): iPayload; overload;
     function Add(const aKey: string; const aValue: TDateTime; aFormat: string = '"%s":"%s"'): iPayload; overload;
     function Add(const aKey: string; const aValue: Boolean; aFormat: string = '"%s":%s'): iPayload; overload;
-    function Add(const aKey: string; const aValue: TJsonObject; aFormat: string = '"%s":%s'): iPayload; overload;
-    function Add(const aKey: string; const aValue: TJsonArray; aFormat: string = '"%s":%s'): iPayload; overload;
-    function Add(const aKey: string; const aValue: Variant; aFormat: string = '"%s":"%s"'): iPayload; overload;
+    function Add(const aKey: string; const aValue: TJsonObject): iPayload; overload;
+    function Add(const aKey: string; const aValue: TJsonArray): iPayload; overload;
+    function Add(const aKey: string; const aValue: Variant): iPayload; overload;
 
     function jti(const aID: UInt64): iPayload;                                  { jti - Jwt ID          - Jwt ID ( ID ) }
     function iss(const aEmissor: String): iPayload;                             { iss - Issuer          - Emissor ( Emissor ) }

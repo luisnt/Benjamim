@@ -3,12 +3,12 @@ unit Benjamim.Header;
 interface
 
 uses
-  System.JSON, System.Classes, System.SysUtils
-
-    , Benjamim.Utils
-    , Benjamim.Header.Interfaces
-
-    ;
+  {$IF DEFINED(FPC)}
+  fpjson, Classes, SysUtils,
+  {$ELSE}
+  System.JSON, System.Classes, System.SysUtils,
+  {$ENDIF}
+  Benjamim.Utils, Benjamim.Header.Interfaces;
 
 type
   THeader = class(TInterfacedObject, iHeader)
